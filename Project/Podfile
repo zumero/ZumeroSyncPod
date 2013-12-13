@@ -1,0 +1,9 @@
+pod "ZumeroSync", :path => "../"
+platform :ios
+platform :osx
+
+target "Demo" do
+end
+
+target "DemoTests" do
+end
