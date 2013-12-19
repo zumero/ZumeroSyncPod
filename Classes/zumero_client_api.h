@@ -1,7 +1,20 @@
 /*
-** Copyright 2013 Zumero, LLC
-** All Rights Reserved
-*/
+ *   Copyright 2013 Zumero LLC
+ * 
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
+ */
+
 #ifndef _ZUMERO_CLIENT_API_H_
 #define _ZUMERO_CLIENT_API_H_
 
@@ -44,6 +57,7 @@ extern "C" {
 #define ZUMERO_SALVAGE_NEEDED                    (ZUMERO_ERROR | (16<<8))
 #define ZUMERO_DBFILE_NOT_FOUND                  (ZUMERO_ERROR | (17<<8))
 #define ZUMERO_TOO_MANY_DEADLOCKS                (ZUMERO_ERROR | (18<<8))
+#define ZUMERO_LICENSE_ERROR                     (ZUMERO_ERROR | (19<<8))
 #define ZUMERO_INVALIDARG                        (ZUMERO_ERROR | (30<<8))
 #define ZUMERO_INVALID_DBFILE_NAME               (ZUMERO_ERROR | (50<<8))
 #define ZUMERO_INVALID_AUTH_SCHEME_STRING        (ZUMERO_ERROR | (51<<8))
