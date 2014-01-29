@@ -3,7 +3,7 @@
 //
 //  ZumeroSync - a simple Objective-C wrapper around the Zumero Client API
 //
-//  Copyright 2013 Zumero LLC
+//  Copyright 2013-2014 Zumero LLC
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -292,9 +292,11 @@
 {
 	if ((rc != 0) && (rc != ZUMERO_PARTIAL))
 	{
-		if ((! details) || (! *details))
-			details = zumero_errstr(rc);
-		NSString *msg = [NSString stringWithUTF8String:details];
+		NSString *msg = nil;
+		if (details)
+			msg = [NSString stringWithUTF8String:details];
+		else
+			msg = [NSString stringWithFormat:@"error (%i)", rc];
 		
 		[ZumeroSync logZumeroError:rc text:msg path:path error:error];
 	}
@@ -306,6 +308,11 @@
 		return;
 	
 	NSMutableDictionary *ui = [NSMutableDictionary dictionary];
+	
+	const char *prefix = zumero_errstr(zcode);
+	
+	if (prefix)
+		text = [NSString stringWithFormat:@"%s: %@", prefix, text];
 	
 	[ui setObject:text forKey:NSLocalizedDescriptionKey];
 	

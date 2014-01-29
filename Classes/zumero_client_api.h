@@ -31,6 +31,14 @@ extern "C" {
 **
 ** The zumero_errstr() function can be used to obtain an English-language
 ** string corresponding to any Zumero-specific result code.
+**
+** WARNING: If you change the numeric value of any result code, you must also
+**          change the desktop/Xamarin wrapper to match:
+**              @/src/sdk/netfx/zumero.cs
+**          If you add or remove result codes, then you'll need to change
+**          that wrapper as well as the WinRT/WP8 wrappers:
+**              @/src/sdk/windows/shared/client_component/ZumeroClient.h
+**              @/src/sdk/windows/shared/client_netfx/ZumeroClient.cs
 */
 
 #define ZUMERO_ERROR    200              /* low byte of any result code which is an error */
@@ -59,6 +67,7 @@ extern "C" {
 #define ZUMERO_INVALID_DBFILE_NAME               (ZUMERO_ERROR | (50<<8))
 #define ZUMERO_INVALID_AUTH_SCHEME_STRING        (ZUMERO_ERROR | (51<<8))
 #define ZUMERO_UNSUPPORTED                       (ZUMERO_ERROR | (52<<8))
+#define ZUMERO_DIFFERENT_CREDENTIALS             (ZUMERO_ERROR | (53<<8))
 
 /*
 ** Sync the local database with the server database.

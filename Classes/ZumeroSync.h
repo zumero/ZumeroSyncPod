@@ -3,7 +3,7 @@
 //
 //  ZumeroSync - a simple Objective-C wrapper around the Zumero Client API
 //
-//  Copyright 2013 Zumero LLC
+//  Copyright 2013-2014 Zumero LLC
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
