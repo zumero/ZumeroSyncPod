@@ -1,5 +1,9 @@
 # ZumeroSync CHANGELOG
 
+## 1.1.1.1749
+
+- Fixed an issue in 1.1 related to tables with multiple UNIQUE constraints
+
 ## 1.1.0.1729
 
 - Added social_media link
