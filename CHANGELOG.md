@@ -1,5 +1,9 @@
 # ZumeroSync CHANGELOG
 
+## 1.2.0.1792
+
+- Updated to ZSS 1.2 libraries
+
 ## 1.1.1.1749
 
 - Fixed an issue in 1.1 related to tables with multiple UNIQUE constraints
