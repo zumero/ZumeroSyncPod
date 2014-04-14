@@ -95,11 +95,16 @@
 
   @return `YES` if quarantine was successful
  */
-+ (BOOL) QuarantineSyncLastSync:(NSString *)filename
-				      cipherKey:(NSString *)cipherKey
-			  			   pqid:(sqlite3_int64 *)pqid
-						  error:(NSError **)error;
++ (BOOL) QuarantineSinceLastSync:(NSString *)filename
+				       cipherKey:(NSString *)cipherKey
+			  			    pqid:(sqlite3_int64 *)pqid
+						   error:(NSError **)error;
 
+// older, incorrect name, left here for compatibility
++ (BOOL) QuarantineSyncLastSync:(NSString *)filename
+					  cipherKey:(NSString *)cipherKey
+						   pqid:(sqlite3_int64 *)pqid
+						  error:(NSError **)error;
 
 /** Sync the local database with the server database, including the changes
   stored in the specified quarantine.
@@ -169,121 +174,5 @@
 				cipherKey:(NSString *)cipherKey
 					  qid:(sqlite3_int64)qid
 					error:(NSError **)error;
-
-
-/** Re-sync changes.
-
-  This function is only needed if the server has lost data it previously had,
-  for example if the server's hard drive failed and the machine was restored
-  from a backup.
-
-  @param filename Database filename (UTF-8)
-  @param cipherKey Key to unlock encrypted database (or nil)	
-  @param serverUrl Zumero server url
-  @param remote Dbfile name on server
-  @param authScheme Scheme part of auth credentials (or nil) 
-  @param user Username part of auth credentials (or nil)		 
-  @param password Password part of auth credentials (or nil)	 
-  @param partial OUT: YES if Salvage must be called again
-  @param error On failure, localizedDescription will contain error text		
-
-  @return `YES` if sync was successful
-
- */ 
-+ (BOOL) Salvage:(NSString *)filename
-	   cipherKey:(NSString *)cipherKey
-	   serverUrl:(NSString *)serverUrl
-		  remote:(NSString *)remote
-	  authScheme:(NSDictionary *)authScheme
-			user:(NSString *)user
-		password:(NSString *)password
-		 partial:(BOOL *)partial
-		   error:(NSError **)error;
-
-/** Re-sync changes.
-
-  This function is only needed if the server has lost data it previously had,
-  for example if the server's hard drive failed and the machine was restored
-  from a backup.
-
-  @param filename Database filename (UTF-8)
-  @param cipherKey Key to unlock encrypted database (or nil)	
-  @param serverUrl Zumero server url
-  @param remote Dbfile name on server
-  @param authSchemeJS Scheme part of auth credentials, as JSON (or nil) 
-  @param user Username part of auth credentials (or nil)		 
-  @param password Password part of auth credentials (or nil)	 
-  @param partial OUT: YES if Salvage must be called again
-  @param error On failure, localizedDescription will contain error text		
-
-  @return `YES` if sync was successful
-
- */ 
-+ (BOOL) Salvage:(NSString *)filename
-	   cipherKey:(NSString *)cipherKey
-	   serverUrl:(NSString *)serverUrl
-		  remote:(NSString *)remote
-	  authSchemeJS:(NSString *)authSchemeJS
-			user:(NSString *)user
-		password:(NSString *)password
-		 partial:(BOOL *)partial
-		   error:(NSError **)error;
-
-
-/** Move un-synced local changes into an isolated holding area. 
-
-  Typically, the reason to do so is because the authenticated user does not have sufficient
-  permissions to perform changes that need to be salvaged (because the changes
-  were originally performed by a different user).
-
-  @param filename Database filename (UTF-8)
-  @param cipherKey Key to unlock encrypted database (or nil)	
-  @param serverUrl Zumero server url
-  @param remote Dbfile name on server
-  @param authScheme Scheme part of auth credentials (or nil) 
-  @param user Username part of auth credentials (or nil)		 
-  @param password Password part of auth credentials (or nil)	 
-  @param pqid OUT: quarantine id written here
-  @param error On failure, localizedDescription will contain error text		
-
-  @return `YES` if sync was successful
- */ 
-+ (BOOL) QuarantineUnsalvaged:(NSString *)filename
-					cipherKey:(NSString *)cipherKey
-					serverUrl:(NSString *)serverUrl
-					   remote:(NSString *)remote
-				   authScheme:(NSDictionary *)authScheme
-						 user:(NSString *)user
-					 password:(NSString *)password
-						 pqid:(sqlite3_int64 *)pqid
-						error:(NSError **)error;
-
-/** Move un-synced local changes into an isolated holding area. 
-
-  Typically, the reason to do so is because the authenticated user does not have sufficient
-  permissions to perform changes that need to be salvaged (because the changes
-  were originally performed by a different user).
-
-  @param filename Database filename (UTF-8)
-  @param cipherKey Key to unlock encrypted database (or nil)	
-  @param serverUrl Zumero server url
-  @param remote Dbfile name on server
-  @param authSchemeJS Scheme part of auth credentials, as JSON (or nil) 
-  @param user Username part of auth credentials (or nil)		 
-  @param password Password part of auth credentials (or nil)	 
-  @param pqid OUT: quarantine id written here
-  @param error On failure, localizedDescription will contain error text		
-
-  @return `YES` if sync was successful
- */ 
-+ (BOOL) QuarantineUnsalvaged:(NSString *)filename
-					cipherKey:(NSString *)cipherKey
-					serverUrl:(NSString *)serverUrl
-					   remote:(NSString *)remote
-				 authSchemeJS:(NSString *)authSchemeJS
-						 user:(NSString *)user
-					 password:(NSString *)password
-						 pqid:(sqlite3_int64 *)pqid
-						error:(NSError **)error;
 
 @end

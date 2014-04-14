@@ -71,9 +71,17 @@
 }
 
 
-#pragma mark - QuarantineSyncLastSync
+#pragma mark - QuarantineSinceLastSync
 
 + (BOOL) QuarantineSyncLastSync:(NSString *)filename
+					  cipherKey:(NSString *)cipherKey
+						   pqid:(sqlite3_int64 *)pqid
+					      error:(NSError **)error
+{
+	return [ZumeroSync QuarantineSinceLastSync:filename cipherKey:cipherKey pqid:pqid error:error];
+}
+
++ (BOOL) QuarantineSinceLastSync:(NSString *)filename
 					  cipherKey:(NSString *)cipherKey
 						   pqid:(sqlite3_int64 *)pqid
 					      error:(NSError **)error
@@ -159,108 +167,6 @@
 	[ZumeroSync logFailure:rc details:details path:filename error:error];
 	
 	ZNULLFREE(details);
-	
-	return (rc == 0);
-}
-
-
-#pragma mark - Salvage
-
-//  Re-sync changes.
-//
-//  This function is only needed if the server has lost data it previously had,
-//  for example if the server's hard drive failed and the machine was restored
-//  from a backup.
-//
-+ (BOOL) Salvage:(NSString *)filename
-	   cipherKey:(NSString *)cipherKey
-	   serverUrl:(NSString *)serverUrl
-		  remote:(NSString *)remote
-	  authScheme:(NSDictionary *)authScheme
-			user:(NSString *)user
-		password:(NSString *)password
-		 partial:(BOOL *)partial
-		   error:(NSError **)error
-{
-	NSString *json = nil;
-	
-	if (! [ZumeroSync schemeJSON:authScheme json:&json error:error])
-		return NO;
-
-	return [ZumeroSync Salvage:filename cipherKey:cipherKey serverUrl:serverUrl remote:remote authSchemeJS:json user:user password:password partial:partial error:error];
-}
-
-+ (BOOL) Salvage:(NSString *)filename
-	   cipherKey:(NSString *)cipherKey
-	   serverUrl:(NSString *)serverUrl
-		  remote:(NSString *)remote
-	authSchemeJS:(NSString *)authSchemeJS
-			user:(NSString *)user
-		password:(NSString *)password
-		 partial:(BOOL *)partial
-		   error:(NSError **)error
-{
-	char *details = NULL;
-	
-	int rc = zumero_salvage(_US(filename), _US(cipherKey), _US(serverUrl), _US(remote), _US(authSchemeJS), _US(user), _US(password), NULL, &details);
-	
-	[ZumeroSync logFailure:rc details:details path:filename error:error];
-	
-	ZNULLFREE(details);
-	
-	*partial = (rc == ZUMERO_PARTIAL);
-	
-	return ((rc == 0) || (rc == ZUMERO_PARTIAL));
-}
-
-
-#pragma mark - QuarantineUnsalvaged
-
-//  Move un-synced local changes into an isolated holding area. Typically, the
-//  reason to do so is because the authenticated user does not have sufficient
-//  permissions to perform changes that need to be salvaged (because the changes
-//  were originally performed by a different user).
-//
-+ (BOOL) QuarantineUnsalvaged:(NSString *)filename
-					cipherKey:(NSString *)cipherKey
-					serverUrl:(NSString *)serverUrl
-					   remote:(NSString *)remote
-				   authScheme:(NSDictionary *)authScheme
-						 user:(NSString *)user
-					 password:(NSString *)password
-						 pqid:(sqlite3_int64 *)pqid
-						error:(NSError **)error
-{
-	NSString *json = nil;
-	
-	if (! [ZumeroSync schemeJSON:authScheme json:&json error:error])
-		return NO;
-	
-	return [ZumeroSync QuarantineUnsalvaged:filename cipherKey:cipherKey serverUrl:serverUrl remote:remote authSchemeJS:json user:user password:password pqid:pqid error:error];
-}
-
-+ (BOOL) QuarantineUnsalvaged:(NSString *)filename
-					cipherKey:(NSString *)cipherKey
-					serverUrl:(NSString *)serverUrl
-					   remote:(NSString *)remote
-				 authSchemeJS:(NSString *)authSchemeJS
-						 user:(NSString *)user
-					 password:(NSString *)password
-						 pqid:(sqlite3_int64 *)pqid
-						error:(NSError **)error
-{
-
-	char *details = NULL;
-	sqlite3_int64 qid = 0;
-	
-	int rc = zumero_quarantine_unsalvaged(_US(filename), _US(cipherKey), _US(serverUrl), _US(remote), _US(authSchemeJS), _US(user), _US(password), NULL, &qid, &details);
-	
-	[ZumeroSync logFailure:rc details:details path:filename error:error];
-	
-	ZNULLFREE(details);
-	
-	if (rc == 0)
-		*pqid = qid;
 	
 	return (rc == 0);
 }

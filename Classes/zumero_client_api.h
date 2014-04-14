@@ -59,7 +59,7 @@ extern "C" {
 #define ZUMERO_FOREIGN_KEY_CONSTRAINT_VIOLATION  (ZUMERO_ERROR | (13<<8))
 #define ZUMERO_SYNC_REJECT_BY_RULE               (ZUMERO_ERROR | (14<<8))
 #define ZUMERO_WRONG_DBFILE                      (ZUMERO_ERROR | (15<<8))
-#define ZUMERO_SALVAGE_NEEDED                    (ZUMERO_ERROR | (16<<8))
+#define ZUMERO_SERVER_ROLLBACK_DETECTED          (ZUMERO_ERROR | (16<<8))
 #define ZUMERO_DBFILE_NOT_FOUND                  (ZUMERO_ERROR | (17<<8))
 #define ZUMERO_TOO_MANY_DEADLOCKS                (ZUMERO_ERROR | (18<<8))
 #define ZUMERO_LICENSE_ERROR                     (ZUMERO_ERROR | (19<<8))
@@ -124,44 +124,6 @@ int zumero_delete_quarantine(
   const char *zFilename,     /* Database filename (UTF-8) */
   const char *zCipherKey,    /* Key to unlock encrypted database */
   sqlite3_int64 qid,         /* Quarantine id */
-  char **pzErrorDetails      /* OUT: Error message written here */
-);
-
-/*
-** Re-sync changes.
-**
-** This function is only needed if the server has lost data it previously had,
-** for example if the server's hard drive failed and the machine was restored
-** from a backup.
-*/
-int zumero_salvage(
-  const char *zFilename,     /* Database filename (UTF-8) */
-  const char *zCipherKey,    /* Key to unlock encrypted database */
-  const char *zServerUrl,    /* Zumero server url */
-  const char *zDbfile,       /* Dbfile name on server */
-  const char *zAuthScheme,   /* Scheme part of auth credentials */
-  const char *zUser,         /* Username part of auth credentials */
-  const char *zPassword,     /* Password part of auth credentials */
-  const char *zTempDir,      /* Temp directory filename */
-  char **pzErrorDetails      /* OUT: Error message written here */
-);
-
-/*
-** Move un-synced local changes into an isolated holding area. Typically, the
-** reason to do so is because the authenticated user does not have sufficient
-** permissions to perform changes that need to be salvaged (because the changes
-** were originally performed by a different user).
-*/
-int zumero_quarantine_unsalvaged(
-  const char *zFilename,     /* Database filename (UTF-8) */
-  const char *zCipherKey,    /* Key to unlock encrypted database */
-  const char *zServerUrl,    /* Zumero server url */
-  const char *zDbfile,       /* Dbfile name on server */
-  const char *zAuthScheme,   /* Scheme part of auth credentials */
-  const char *zUser,         /* Username part of auth credentials */
-  const char *zPassword,     /* Password part of auth credentials */
-  const char *zTempDir,      /* Temp directory filename */
-  sqlite3_int64* pnQid,      /* OUT: quarantine id written here */
   char **pzErrorDetails      /* OUT: Error message written here */
 );
 

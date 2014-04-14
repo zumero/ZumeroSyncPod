@@ -1,5 +1,9 @@
 # ZumeroSync CHANGELOG
 
+## 1.3.0.1880
+
+- Updated to ZSS 1.3 libraries
+
 ## 1.2.0.1800
 
 - Added 64-bit iOS emulator libraries
