@@ -21,22 +21,16 @@
 
 #define FORMATTED_UUID_LEN 36
 
-
-@implementation ZumeroUtil
-
 #define hexval(c)  ((unsigned char)(isdigit(c) ? ((c) - '0') : (tolower(c) + 10 - 'a')))
 #define hexByte(p) ((hexval((p)[0]) << 4) | hexval((p)[1]))
 
-
-#if defined(WINDOWS)
-  typedef unsigned char SG_uint8;
-#else
 # include <stdint.h>
-  typedef uint8_t       SG_uint8;
-#endif
+typedef uint8_t       SG_uint8;
 
 char * SG_hex__format_uint8(char * pbuf, SG_uint8 v);
 
+
+@implementation ZumeroUtil
 
 //  given a 16-byte blob (in NSData form), return an MSSQL-style
 //  GUID string ("aaba1234-5678-9090-9876-aabbccdd1234")

@@ -63,6 +63,7 @@ extern "C" {
 #define ZUMERO_DBFILE_NOT_FOUND                  (ZUMERO_ERROR | (17<<8))
 #define ZUMERO_TOO_MANY_DEADLOCKS                (ZUMERO_ERROR | (18<<8))
 #define ZUMERO_LICENSE_ERROR                     (ZUMERO_ERROR | (19<<8))
+#define ZUMERO_CLIENT_CORRUPTION_DETECTED        (ZUMERO_ERROR | (20<<8))
 #define ZUMERO_INVALIDARG                        (ZUMERO_ERROR | (30<<8))
 #define ZUMERO_INVALID_DBFILE_NAME               (ZUMERO_ERROR | (50<<8))
 #define ZUMERO_INVALID_AUTH_SCHEME_STRING        (ZUMERO_ERROR | (51<<8))

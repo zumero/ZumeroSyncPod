@@ -1,5 +1,10 @@
 # ZumeroSync CHANGELOG
 
+## 1.4.0.2014
+
+- Xcode 6 build fixes
+- Updated to ZSS 1.4 libraries
+
 ## 1.3.0.1880
 
 - Updated to ZSS 1.3 libraries
