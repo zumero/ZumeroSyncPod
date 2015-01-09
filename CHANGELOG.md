@@ -1,5 +1,9 @@
 # ZumeroSync CHANGELOG
 
+## 1.6.0.beta
+
+- Pre-release. Not likely to work for you if Zumero hasn't directed you to use it.
+
 ## 1.5.0.2157
 
 - Updated to ZSS 1.5 libraries
