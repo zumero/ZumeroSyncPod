@@ -1,8 +1,11 @@
 # ZumeroSync CHANGELOG
 
-## 1.6.0.beta
+## 2.0.0.2589
 
-- Pre-release. Not likely to work for you if Zumero hasn't directed you to use it.
+- Updated to ZSS 2.0 libraries. 
+- This is a significant upgrade, and should only be used with ZSS 2.x servers. Older clients will work with ZSS 2.x servers, but newer client libraries are *not* backwards compatible.
+- Please see the ZSS upgrade tutorial at http://zumero.com/howto/zss-upgrade/ for details on the recommended upgrade path.
+- To maintain compatibility with ZSS 1.x servers, append `, '~> 1.5'` to the `ZumeroSync` line in your Podfile.
 
 ## 1.5.0.2157
 

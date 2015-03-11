@@ -34,6 +34,17 @@ To use encrypted local storage on iOS, use [SQLCipher][sqlcipherpod] instead; in
 
 instead of the default `pod` reference will include SQLCipher.
 
+## Version 2.x
+
+This is a significant upgrade, and should only be used with ZSS 2.x servers. Older clients will work with ZSS 2.x servers, but newer client libraries are *not* backwards compatible.
+
+Please see the ZSS upgrade tutorial at [zumero.com/howto/zss-upgrade](http://zumero.com/howto/zss-upgrade/) for details on the recommended upgrade path.
+
+To maintain compatibility with ZSS 1.x servers, append `, '~> 1.5'` to the `ZumeroSync` line in your Podfile, e.g.
+
+    pod 'ZumeroSync', '~> 1.5'
+
+
 ## Author
 
 Zumero LLC, <support@zumero.com>
