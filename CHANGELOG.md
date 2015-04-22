@@ -1,5 +1,9 @@
 # ZumeroSync CHANGELOG
 
+## 2.0.1.2640
+
+- Updated to ZSS 2.0.1 libraries.
+
 ## 2.0.0.2589
 
 - Updated to ZSS 2.0 libraries. 
