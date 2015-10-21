@@ -70,6 +70,54 @@ extern "C" {
 #define ZUMERO_INVALID_AUTH_SCHEME_STRING        (ZUMERO_ERROR | (51<<8))
 #define ZUMERO_UNSUPPORTED                       (ZUMERO_ERROR | (52<<8))
 #define ZUMERO_DIFFERENT_CREDENTIALS             (ZUMERO_ERROR | (53<<8))
+#define ZUMERO_CANCELLED                         (ZUMERO_ERROR | (54<<8))
+
+
+/*
+** The possible values for the phase indicator 
+** for a zumero_progress_callback function.
+*/
+#define ZUMERO_PHASE_PREPARING              1 /* Examining the local sqlite database  
+                                                 to determine which changes need to be 
+                                                 uploaded. */
+#define ZUMERO_PHASE_UPLOADING              2 /* Uploading changes to the server. */
+#define ZUMERO_PHASE_WAITING_FOR_RESPONSE   3 /* Waiting for the server to apply our 
+                                                 changes and calculate the response. */
+#define ZUMERO_PHASE_DOWNLOADING            4 /* Downloading the changes from the server. */
+#define ZUMERO_PHASE_APPLYING               5 /* Applying the downloaded changes. */
+
+#if defined(WINDOWS)
+    typedef __int64					zumero_int64;
+#else
+    typedef int64_t					zumero_int64;
+#endif
+
+/*
+** The prototype for the progress funciton used by zumero_sync2.
+*/
+typedef void zumero_progress_callback(
+  int cancellation_token,    /* The cancellation token for this sync operation.
+                                The cancellation token will remain the same 
+                                for all progress callbacks for a single sync 
+                                operation. */
+  int phase,                 /* The current sync phase. You may receive 
+                                multiple progress callbacks for the same 
+                                phase. Some phases may be repeated multiple 
+                                times for a single sync operation.  See the 
+                                ZUMERO_PHASE_* definitions for the possible 
+                                values of this argument. */
+  zumero_int64 bytesSoFar,   /* If the phase is ZUMERO_PHASE_UPLOADING or 
+                                ZUMERO_PHASE_DOWNLOADING, this argument 
+                                will be the number of bytes that have been 
+                                transferred so far.*/
+  zumero_int64 bytesTotal,   /* If the phase is ZUMERO_PHASE_UPLOADING or 
+                                ZUMERO_PHASE_DOWNLOADING, this argument 
+                                will be the number of bytes that will be 
+                                transferred in this phase.*/
+  void* data                 /* An opaque data pointer. You can provide 
+                                this to zumero_sync2, and zumero will not
+                                modify or use it. */
+  );
 
 /*
 ** Sync the local database with the server database.
@@ -85,6 +133,25 @@ int zumero_sync(
   const char *zTempDir,      /* Temp directory filename */
   char **pzErrorDetails      /* OUT: Error message written here */
 );
+
+
+/*
+** Sync the local database with the server database. This version supports 
+** a progress callback function.
+*/
+int zumero_sync2(
+    const char *zFilename,     /* Database filename (UTF-8) */
+    const char *zCipherKey,    /* Key to unlock encrypted database */
+    const char *zServerUrl,    /* Zumero server url */
+    const char *zDbfile,       /* Dbfile name on server */
+    const char *zAuthScheme,   /* Scheme part of auth credentials */
+    const char *zUser,         /* Username part of auth credentials */
+    const char *zPassword,     /* Password part of auth credentials */
+    const char *zTempDir,      /* Temp directory filename */
+    zumero_progress_callback * fnCallback, /* Callback function */
+    void * pCallbackData,      /* A pointer, which will be passed to the zumero_progress_callback function */
+    char **pzErrorDetails      /* OUT: Error message written here */
+    );
 
 /*
 ** Move un-synced local changes into an isolated holding area. Typically, the
@@ -138,6 +205,13 @@ void zumero_free(void*);
 ** Return the English-language text that describes the result code.
 */
 const char* zumero_errstr(int);
+
+/*
+** Cancel a zumero_sync2 call that is in progress. The cancellationToken 
+** will be provided to your callback function. This function is safe to call from
+** any thread. The zumero_sync2 call will throw a ZUMERO_CANCELLED error.
+*/
+void zumero_cancel(int cancellationToken);
 
 #ifdef __cplusplus
 }  /* End of the 'extern "C"' block */

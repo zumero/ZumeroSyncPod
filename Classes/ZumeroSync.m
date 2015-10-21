@@ -20,6 +20,15 @@
 
 #import "ZumeroSync.h"
 
+@interface callback_holder : NSObject
+
+@property    (weak)ZumeroProgressCallback callback;
+@property    void * dataPtr;
+
+@end
+
+@implementation callback_holder
+@end
 
 @implementation ZumeroSync
 
@@ -68,6 +77,60 @@
 	ZNULLFREE(details);
 	
 	return (rc == 0);
+}
+
+// Sync the local database with the server database.
+//
++ (BOOL) Sync:(NSString *)filename
+    cipherKey:(NSString *)cipherKey
+    serverUrl:(NSString *)serverUrl
+       remote:(NSString *)remote
+   authScheme:(NSDictionary *)authScheme
+         user:(NSString *)user
+     password:(NSString *)password
+     callback:(ZumeroProgressCallback)callback
+  dataPointer:(void*)dataPointer
+        error:(NSError **)error
+{
+    NSString *json = nil;
+    
+    if (! [ZumeroSync schemeJSON:authScheme json:&json error:error])
+        return NO;
+    
+    return [ZumeroSync Sync:filename cipherKey:cipherKey serverUrl:serverUrl remote:remote authSchemeJS:json user:user password:password callback:callback dataPointer:dataPointer error:error];
+}
+
+
+void progress_callback(int cancellation_token, int phase, zumero_int64 bytesSoFar, zumero_int64 bytesTotal, void* data)
+{
+    callback_holder * cb = (__bridge callback_holder*)data;
+    if (cb.callback != NULL)
+        cb.callback(cancellation_token, phase, bytesSoFar, bytesTotal, cb.dataPtr);
+}
+
++ (BOOL) Sync:(NSString *)filename
+    cipherKey:(NSString *)cipherKey
+    serverUrl:(NSString *)serverUrl
+       remote:(NSString *)remote
+ authSchemeJS:(NSString *)authSchemeJS
+         user:(NSString *)user
+     password:(NSString *)password
+     callback:(ZumeroProgressCallback)callback
+  dataPointer:(void*)dataPointer
+        error:(NSError **)error
+{
+    char *details = NULL;
+    callback_holder *cb = [callback_holder new];
+    cb.callback = callback;
+    cb.dataPtr = dataPointer;
+    
+    int rc = zumero_sync2(_US(filename), _US(cipherKey), _US(serverUrl), _US(remote), _US(authSchemeJS), _US(user), _US(password), NULL, (zumero_progress_callback*)progress_callback, (__bridge void*)cb, &details);
+    
+    [ZumeroSync logFailure:rc details:details path:filename error:error];
+    
+    ZNULLFREE(details);
+    
+    return (rc == 0);
 }
 
 
@@ -169,6 +232,16 @@
 	ZNULLFREE(details);
 	
 	return (rc == 0);
+}
+
+#pragma mark - Cancel
+
+//  Cancel an ongoing sync
+//
++ (void) Cancel: (int)cancellationToken
+{
+	
+	zumero_cancel(cancellationToken);
 }
 
 

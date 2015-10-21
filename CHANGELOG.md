@@ -1,5 +1,10 @@
 # ZumeroSync CHANGELOG
 
+## 2.1.0.2939
+
+- Updated to ZSS 2.1.0 libraries
+- Added optional Sync progress and cancellation callbacks. See http://staging.zumero.com/docs/zumero_for_sql_server_client_api.html#section_progress for details
+
 ## 2.0.1.2640
 
 - Updated to ZSS 2.0.1 libraries.
