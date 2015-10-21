@@ -16,6 +16,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.default_subspec = 'SQLite'
+  s.osx.deployment_target = "10.7"
 
   s.subspec 'common' do |ss|
     ss.libraries = 'z'
