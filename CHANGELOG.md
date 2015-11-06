@@ -1,5 +1,10 @@
 # ZumeroSync CHANGELOG
 
+## 2.1.0.2940
+
+- Make sure Cocoapods knows this pod is iOS and Mac-compatible
+- Include bitcode in iOS library
+
 ## 2.1.0.2939
 
 - Updated to ZSS 2.1.0 libraries
