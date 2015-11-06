@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "ZumeroSync"
-  s.version      = "2.1.0.2939"
+  s.version      = "2.1.0.2940"
   s.summary      = "Use Zumero to sync SQL Server databases with local SQLite dbfiles."
   s.description  = <<-DESC
                     Includes all sync and quarantine functions of the Zumero API.
@@ -17,6 +17,7 @@ Pod::Spec.new do |s|
 
   s.default_subspec = 'SQLite'
   s.osx.deployment_target = "10.7"
+  s.ios.deployment_target = '7.0'
 
   s.subspec 'common' do |ss|
     ss.libraries = 'z'
