@@ -2,7 +2,7 @@
 
 ## 2.2.0.3064
 
-- Update to ZSS 2.0.2 libraries
+- Update to ZSS 2.2.0 libraries
 
 ## 2.1.0.2940
 
