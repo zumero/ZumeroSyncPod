@@ -1,5 +1,9 @@
 # ZumeroSync CHANGELOG
 
+## 2.2.0.3064
+
+- Update to ZSS 2.0.2 libraries
+
 ## 2.1.0.2940
 
 - Make sure Cocoapods knows this pod is iOS and Mac-compatible

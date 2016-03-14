@@ -1,5 +1,5 @@
 /*
- *   Copyright 2013-2015 Zumero LLC
+ *   Copyright 2013-2016 Zumero LLC
  * 
  *   Licensed under the Zumero Client SDK License (the "License");
  *   you may not use this file except in compliance with the License.
@@ -65,6 +65,7 @@ extern "C" {
 #define ZUMERO_LICENSE_ERROR                     (ZUMERO_ERROR | (19<<8))
 #define ZUMERO_CLIENT_CORRUPTION_DETECTED        (ZUMERO_ERROR | (20<<8))
 #define ZUMERO_SERVER_MISCONFIGURATION           (ZUMERO_ERROR | (21<<8))
+#define ZUMERO_PURGED_DATA_REFERENCED            (ZUMERO_ERROR | (22<<8))
 #define ZUMERO_INVALIDARG                        (ZUMERO_ERROR | (30<<8))
 #define ZUMERO_INVALID_DBFILE_NAME               (ZUMERO_ERROR | (50<<8))
 #define ZUMERO_INVALID_AUTH_SCHEME_STRING        (ZUMERO_ERROR | (51<<8))
