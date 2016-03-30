@@ -1,5 +1,9 @@
 # ZumeroSync CHANGELOG
 
+## 2.2.1.3091
+
+- Increase download timeout during sync
+
 ## 2.2.0.3064
 
 - Update to ZSS 2.2.0 libraries
