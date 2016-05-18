@@ -1,5 +1,10 @@
 # ZumeroSync CHANGELOG
 
+## 2.2.2.3164
+
+- Update to ZSS 2.2.2 libraries
+- The iOS pod now reports the correct version number in stack traces
+
 ## 2.2.1.3091
 
 - Increase download timeout during sync
