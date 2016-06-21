@@ -119,12 +119,76 @@ void progress_callback(int cancellation_token, int phase, zumero_int64 bytesSoFa
   dataPointer:(void*)dataPointer
         error:(NSError **)error
 {
+	return [ZumeroSync Sync:filename cipherKey:cipherKey serverUrl:serverUrl remote:remote authSchemeJS:authSchemeJS user:user password:password callback:callback dataPointer:dataPointer optionsJS:nil syncId:nil error:error];
+}
+
+
+/** Sync the local database with the server database.
+ 
+ @param filename Database filename (UTF-8)
+ @param cipherKey Key to unlock encrypted database (or nil)
+ @param serverUrl Zumero server url
+ @param remote Dbfile name on server
+ @param authSchemeJS Scheme part of auth credentials, as JSON (or nil)
+ @param user Username part of auth credentials (or nil)
+ @param password Password part of auth credentials (or nil)
+ @param callback A progress/cancellation callback block (or nil)
+ @param dataPointer An opaque data pointer for use by the callback block
+ @param optionsJS JSON string specifying additional sync options (or nil)
+ @param syncId receives a sync details lookup token, if requested in optionsJS
+ @param error On failure, localizedDescription will contain error text
+ 
+ @return `YES` if sync was successful
+ */
+
+
++ (BOOL) Sync:(NSString *)filename
+    cipherKey:(NSString *)cipherKey
+    serverUrl:(NSString *)serverUrl
+       remote:(NSString *)remote
+   authScheme:(NSDictionary *)authScheme
+         user:(NSString *)user
+     password:(NSString *)password
+     callback:(ZumeroProgressCallback)callback
+  dataPointer:(void*)dataPointer
+      options:(NSDictionary *)options
+       syncId:(int *)syncId
+        error:(NSError **)error
+{
+    NSString *json = nil;
+    NSString *ojson = nil;
+    
+    if (! [ZumeroSync schemeJSON:authScheme json:&json error:error])
+        return NO;
+    
+    if (! [ZumeroSync schemeJSON:options json:&ojson error:error])
+        return NO;
+
+	return [ZumeroSync Sync:filename cipherKey:cipherKey serverUrl:serverUrl remote:remote authSchemeJS:json user:user password:password callback:callback dataPointer:dataPointer optionsJS:ojson syncId:syncId error:error];
+
+}
+
+
++ (BOOL) Sync:(NSString *)filename
+    cipherKey:(NSString *)cipherKey
+    serverUrl:(NSString *)serverUrl
+       remote:(NSString *)remote
+ authSchemeJS:(NSString *)authSchemeJS
+         user:(NSString *)user
+     password:(NSString *)password
+     callback:(ZumeroProgressCallback)callback
+  dataPointer:(void*)dataPointer
+    optionsJS:(NSString *)optionsJS
+       syncId:(int *)syncId
+        error:(NSError **)error;
+{
+
     char *details = NULL;
     callback_holder *cb = [callback_holder new];
     cb.callback = callback;
     cb.dataPtr = dataPointer;
     
-    int rc = zumero_sync2(_US(filename), _US(cipherKey), _US(serverUrl), _US(remote), _US(authSchemeJS), _US(user), _US(password), NULL, (zumero_progress_callback*)progress_callback, (__bridge void*)cb, &details);
+    int rc = zumero_sync3(_US(filename), _US(cipherKey), _US(serverUrl), _US(remote), _US(authSchemeJS), _US(user), _US(password), NULL, (zumero_progress_callback*)progress_callback, (__bridge void*)cb, _US(optionsJS), syncId, &details);
     
     [ZumeroSync logFailure:rc details:details path:filename error:error];
     

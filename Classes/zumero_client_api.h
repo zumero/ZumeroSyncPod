@@ -155,6 +155,26 @@ int zumero_sync2(
     );
 
 /*
+** Sync the local database with the server database. This version supports 
+** optional JSON configuration detais.
+*/
+int zumero_sync3(
+  const char *zFilename,     /* Database filename (UTF-8) */
+  const char *zCipherKey,    /* Key to unlock encrypted database */
+  const char *zServerUrl,    /* Zumero server url */
+  const char *zDbfile,       /* Dbfile name on server */
+  const char *zAuthScheme,   /* Scheme part of auth credentials */
+  const char *zUser,         /* Username part of auth credentials */
+  const char *zPassword,     /* Password part of auth credentials */
+  const char *zTempDir,      /* Temp directory filename */
+  zumero_progress_callback * fnCallback, /* Callback function */
+  void * pCallbackData,      /* A pointer, which will be passed to the zumero_progress_callback function */
+  const char *jsOptions,     /* JSON string with additional options */
+  int *pSyncId,              /* OUT: sync details id (may be NULL) */
+  char **pzErrorDetails      /* OUT: Error message written here */
+);
+
+/*
 ** Move un-synced local changes into an isolated holding area. Typically, the
 ** reason to do so is because the local changes conflict with other changes
 ** already on the server.

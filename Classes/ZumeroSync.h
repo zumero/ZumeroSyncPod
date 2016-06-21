@@ -132,6 +132,66 @@ typedef void (^ZumeroProgressCallback) (int, int, int64_t, int64_t, void *);
   dataPointer:(void*)dataPointer
         error:(NSError **)error;
 
+/** Sync the local database with the server database.
+ 
+ @param filename Database filename (UTF-8)
+ @param cipherKey Key to unlock encrypted database (or nil)
+ @param serverUrl Zumero server url
+ @param remote Dbfile name on server
+ @param authSchemeJS Scheme part of auth credentials, as JSON (or nil)
+ @param user Username part of auth credentials (or nil)
+ @param password Password part of auth credentials (or nil)
+ @param callback A progress/cancellation callback block (or nil)
+ @param dataPointer An opaque data pointer for use by the callback block
+ @param optionsJS JSON string specifying additional sync options (or nil)
+ @param syncId receives a sync details lookup token, if requested in optionsJS
+ @param error On failure, localizedDescription will contain error text
+ 
+ @return `YES` if sync was successful
+ */
++ (BOOL) Sync:(NSString *)filename
+    cipherKey:(NSString *)cipherKey
+    serverUrl:(NSString *)serverUrl
+       remote:(NSString *)remote
+ authSchemeJS:(NSString *)authSchemeJS
+         user:(NSString *)user
+     password:(NSString *)password
+     callback:(ZumeroProgressCallback)callback
+  dataPointer:(void*)dataPointer
+    optionsJS:(NSString *)optionsJS
+       syncId:(int *)syncId
+        error:(NSError **)error;
+
+
+/** Sync the local database with the server database.
+ 
+ @param filename Database filename (UTF-8)
+ @param cipherKey Key to unlock encrypted database (or nil)
+ @param serverUrl Zumero server url
+ @param remote Dbfile name on server
+ @param authScheme Scheme part of auth credentials (or nil)
+ @param user Username part of auth credentials (or nil)
+ @param password Password part of auth credentials (or nil)
+ @param callback A progress/cancellation callback block (or nil)
+ @param dataPointer An opaque data pointer for use by the callback block
+ @param options additional sync options (or nil)
+ @param syncId receives a sync details lookup token, if requested in options
+ @param error On failure, localizedDescription will contain error text
+ 
+ @return `YES` if sync was successful
+ */
++ (BOOL) Sync:(NSString *)filename
+    cipherKey:(NSString *)cipherKey
+    serverUrl:(NSString *)serverUrl
+       remote:(NSString *)remote
+   authScheme:(NSDictionary *)authScheme
+         user:(NSString *)user
+     password:(NSString *)password
+     callback:(ZumeroProgressCallback)callback
+  dataPointer:(void*)dataPointer
+      options:(NSDictionary *)options
+       syncId:(int *)syncId
+        error:(NSError **)error;
 
 /** @name Cancel
  */
