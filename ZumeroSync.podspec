@@ -19,7 +19,9 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = "10.7"
   s.ios.deployment_target = '7.0'
 
-  s.subspec 'common' do |ss|
+  s.subspec 'SQLite' do |ss|
+    ss.dependency 'sqlite3'
+
     ss.libraries = 'z'
     ss.frameworks = 'CFNetwork'
     ss.ios.vendored_library = 'Libraries/ios/libzumero_client_api.a'
@@ -31,13 +33,17 @@ Pod::Spec.new do |s|
     ss.osx.exclude_files = 'Classes/ios'
   end
 
-  s.subspec 'SQLite' do |ss|
-    ss.dependency 'sqlite3'
-    ss.dependency 'ZumeroSync/common'
-  end
-
   s.subspec 'SQLCipher' do |ss|
     ss.dependency 'SQLCipher'
-    ss.dependency 'ZumeroSync/common'
+
+    ss.libraries = 'z'
+    ss.frameworks = 'CFNetwork'
+    ss.ios.vendored_library = 'Libraries/ios/libzumero_client_api.a'
+    ss.osx.vendored_library = 'Libraries/osx/libzumero_client_api.a'
+
+    ss.source_files = 'Classes'
+
+    ss.ios.exclude_files = 'Classes/osx'
+    ss.osx.exclude_files = 'Classes/ios'
   end
 end
