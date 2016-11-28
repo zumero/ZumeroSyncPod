@@ -15,6 +15,10 @@
 #ifndef _ZUMERO_CLIENT_API_H_
 #define _ZUMERO_CLIENT_API_H_
 
+#if !defined(WINDOWS)
+#include <stdint.h>
+#endif
+
 /*
 ** Make sure we can call this stuff from C++.
 */
@@ -42,7 +46,7 @@ extern "C" {
 */
 
 #define ZUMERO_ERROR    200              /* low byte of any result code which is an error */
-#define ZUMERO_PARTIAL  201              /* not an error */
+#define ZUMERO_PARTIAL  201              /* no longer returned by any zumero functions */
 
 #define ZUMERO_NETWORK_CONNECTION_FAILED         (ZUMERO_ERROR | (1<<8))
 #define ZUMERO_AUTHENTICATION_FAILED             (ZUMERO_ERROR | (2<<8))
@@ -186,7 +190,7 @@ int zumero_quarantine_since_last_sync(
   const char *zFilename,     /* Database filename (UTF-8) */
   const char *zCipherKey,    /* Key to unlock encrypted database */
   const char *zTempDir,      /* Temp directory filename */
-  sqlite3_int64* pnQid,      /* OUT: quarantine id written here */
+  zumero_int64* pnQid,       /* OUT: quarantine id written here */
   char **pzErrorDetails      /* OUT: Error message written here */
 );
 
@@ -197,7 +201,7 @@ int zumero_quarantine_since_last_sync(
 int zumero_sync_quarantine(
   const char *zFilename,     /* Database filename (UTF-8) */
   const char *zCipherKey,    /* Key to unlock encrypted database */
-  sqlite3_int64 qid,         /* Quarantine id */
+  zumero_int64 qid,          /* Quarantine id */
   const char *zServerUrl,    /* Zumero server url */
   const char *zDbfile,       /* Dbfile name on server */
   const char *zAuthScheme,   /* Scheme part of auth credentials */
@@ -207,13 +211,30 @@ int zumero_sync_quarantine(
   char **pzErrorDetails      /* OUT: Error message written here */
 );
 
+int zumero_sync_quarantine3(
+  const char *zFilename,     /* Database filename (UTF-8) */
+  const char *zCipherKey,    /* Key to unlock encrypted database */
+  zumero_int64 qid,          /* Quarantine id */
+  const char *zServerUrl,    /* Zumero server url */
+  const char *zDbfile,       /* Dbfile name on server */
+  const char *zAuthScheme,   /* Scheme part of auth credentials */
+  const char *zUser,         /* Username part of auth credentials */
+  const char *zPassword,     /* Password part of auth credentials */
+  const char *zTempDir,      /* Temp directory filename */
+  zumero_progress_callback * fnCallback, /* Progress callback function */
+  void * pCallbackData,      /* A pointer, which will be passed to the zumero_progress_callback function */
+  const char *jsOptions,     /* JSON string with additional options */
+  int *pSyncId,              /* OUT: sync details id (may be NULL) */
+  char **pzErrorDetails      /* OUT: Error message written here */
+);
+
 /*
 ** Permanently delete quarantined changes.
 */
 int zumero_delete_quarantine(
   const char *zFilename,     /* Database filename (UTF-8) */
   const char *zCipherKey,    /* Key to unlock encrypted database */
-  sqlite3_int64 qid,         /* Quarantine id */
+  zumero_int64 qid,          /* Quarantine id */
   char **pzErrorDetails      /* OUT: Error message written here */
 );
 
@@ -228,9 +249,9 @@ void zumero_free(void*);
 const char* zumero_errstr(int);
 
 /*
-** Cancel a zumero_sync2 call that is in progress. The cancellationToken 
+** Cancel a zumero_sync call that is in progress. The cancellationToken 
 ** will be provided to your callback function. This function is safe to call from
-** any thread. The zumero_sync2 call will throw a ZUMERO_CANCELLED error.
+** any thread. The zumero_sync call will throw a ZUMERO_CANCELLED error.
 */
 void zumero_cancel(int cancellationToken);
 
