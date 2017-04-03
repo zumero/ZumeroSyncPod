@@ -1,5 +1,9 @@
 # ZumeroSync CHANGELOG
 
+## 3.0.1.3598
+
+- Update to ZSS 3.0.1 client libraries
+
 ## 3.0.0.3471
 
 - Update to ZSS 3.0.0 libraries
