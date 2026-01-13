@@ -1,5 +1,10 @@
 # ZumeroSync CHANGELOG
 
+## 3.4.0.4917
+
+- Update to ZSS 3.4.0 client libraries
+- Switch to using XCFramework for multiplatform support
+
 ## 3.2.0.4154
 
 - Update to ZSS 3.2.0 client libraries
